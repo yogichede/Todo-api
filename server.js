@@ -32,11 +32,8 @@ app.get('/todos/:id',function(req,res){
 
 //PORT Request
 app.post('/todos',function(req,res){
-  var body = req.body;
-  if(!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length===0){
-    return res.status(400).send();
-  }
-
+  var body = _.pick(req.body,'description','completed');
+  body.description = body.description.trim();
   body.id = todosId++;
   todos.push(body);
   res.json(body);
