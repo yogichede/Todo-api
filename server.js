@@ -39,6 +39,7 @@ app.post('/todos',function(req,res){
   res.json(body);
 });
 
+//DELETE todos based on the id
 app.delete('/todos/:id',function(req,res){
   var todoId = parseInt(req.params.id,10);
   var deleteId = _.findWhere(todos,{id:todoId});
@@ -50,6 +51,31 @@ app.delete('/todos/:id',function(req,res){
     res.json(deleteId);
   }
 });
+
+// PUT /todo/:id
+
+app.put('/todos/:id',function(req,res){
+  var body = _.pick(req.body,'description','completed');
+  var attributeData = {};
+  var todoId = parseInt(req.params.id,10);
+  var matchedRecord = _.findWhere(todos,{id:todoId});
+
+  if(body.hasOwnProperty('completed') && _.isBoolean(body.completed)){
+    attributeData.completed = body.completed;
+  }
+  else if(body.hasOwnProperty('completed')){
+    res.status(400).send();
+  }
+
+ if(body.hasOwnProperty('description') && _.isString(body.description) && body.description.trim().length>0){
+   attributeData.description = body.description;
+ }
+ else if(body.hasOwnProperty('description')){
+   res.status(400).send();
+ }
+ _.extend(matchedRecord,attributeData);
+ res.json(matchedRecord);
+})
 
 app.listen(PORT,function(){
   console.log('Express Listening on port ' + PORT + '!');
