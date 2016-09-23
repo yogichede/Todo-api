@@ -39,14 +39,16 @@ app.get('/todos', function(req, res) {
 //GET Request
 app.get('/todos/:id', function(req, res) {
     var todoId = parseInt(req.params.id, 10);
-    var matchedRecord = _.findWhere(todos, {
-        id: todoId
+    db.todo.findById(todoId).then(function(responce){
+      if(!!responce){
+        res.json(responce.toJSON());
+      }
+      else {
+        res.send(404).send();
+      }
+    },function(e){
+      res.send(500).send();
     });
-    if (matchedRecord) {
-        res.json(matchedRecord);
-    } else {
-        res.status(400).send()
-    }
 });
 
 //PORT Request
@@ -57,10 +59,6 @@ app.post('/todos', function(req, res) {
     }, function(e) {
         console.log(e);
     });
-    // body.description = body.description.trim();
-    // body.id = todosId++;
-    // todos.push(body);
-    // res.json(body);
 });
 
 //DELETE todos based on the id
