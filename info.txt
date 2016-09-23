@@ -1,0 +1,5 @@
+//To install Sqlite in Heroku Exicute the below commands
+heroku addons:create heroku-postgresql:hobby-dev
+heroku pg:wait //enter twise for wait databse to create 
+npm install pg@4.4.1 --save
+npm install pg-hstore@2.3.2
