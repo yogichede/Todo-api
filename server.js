@@ -108,6 +108,16 @@ app.put('/todos/:id', function(req, res) {
   }, function() {
     res.status(500).send();
   })
+});
+
+// POST /user
+app.post('/user',function(req,res){
+  var body = _.pick(req.body,'email','password');
+  db.user.create(body).then(function(userData){
+    res.json(userData.toJSON());
+  },function(e){
+    res.status(400).json(e);
+  });
 })
 
 db.sequelize.sync().then(function() {
